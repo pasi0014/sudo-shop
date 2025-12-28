@@ -1,0 +1,19 @@
+{%- comment -%}
+  Terminal Window Component
+  Usage:
+    {% render 'terminal-window', title: 'filename.ext', content: content %}
+{%- endcomment -%}
+
+<div class="terminal-window{% if class %} {{ class }}{% endif %}">
+  <div class="terminal-header-bar">
+    <div class="terminal-window-controls">
+      <div class="terminal-control close" aria-hidden="true"></div>
+      <div class="terminal-control minimize" aria-hidden="true"></div>
+      <div class="terminal-control maximize" aria-hidden="true"></div>
+    </div>
+    <p class="terminal-window-title">{{ title | default: 'terminal' }}</p>
+  </div>
+  <div class="terminal-window-content">
+    {{ content }}
+  </div>
+</div>

@@ -9,39 +9,33 @@ class TerminalEffect {
     this.initTypewriter();
     this.initCursorBlink();
     this.initScanlines();
-    this.initMatrixRain();
   }
 
   bootSequence() {
-    const bootElement = document.querySelector('.boot-sequence');
+    const bootElement = document.querySelector('.hero-boot-output');
     if (!bootElement) return;
 
     const commands = [
-      '> Initializing kernel...',
-      '> Loading modules...',
-      '> Mounting filesystems...',
-      '> Starting services...',
-      '> System ready.'
+      '[INFO] Initializing kernel...',
+      '[INFO] Loading modules...',
+      '[INFO] Mounting filesystems...',
+      '[SUCCESS] System ready.'
     ];
 
     let delay = 0;
     commands.forEach((cmd, index) => {
       setTimeout(() => {
-        const output = document.createElement('div');
-        output.className = 'terminal-output';
+        const output = document.createElement('p');
+        output.className = 'terminal-output-text success';
         output.textContent = cmd;
         bootElement.appendChild(output);
       }, delay);
       delay += 500;
     });
-
-    setTimeout(() => {
-      bootElement.classList.remove('boot-sequence');
-    }, delay);
   }
 
   initTypewriter() {
-    const elements = document.querySelectorAll('.typewriter');
+    const elements = document.querySelectorAll('.typing-text');
     elements.forEach(element => {
       const text = element.textContent;
       element.textContent = '';
@@ -58,7 +52,7 @@ class TerminalEffect {
   }
 
   initCursorBlink() {
-    const cursors = document.querySelectorAll('.terminal-cursor-block');
+    const cursors = document.querySelectorAll('.cursor');
     cursors.forEach(cursor => {
       setInterval(() => {
         cursor.style.opacity = this.cursorVisible ? '1' : '0';
@@ -73,46 +67,6 @@ class TerminalEffect {
     const scanlines = document.createElement('div');
     scanlines.className = 'scanlines';
     document.body.appendChild(scanlines);
-  }
-
-  initMatrixRain() {
-    const canvas = document.createElement('canvas');
-    canvas.className = 'matrix-rain';
-    document.body.appendChild(canvas);
-
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = '01IOZ<>[]{};:';
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 255, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = '#00ff00';
-      ctx.font = `${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 50);
-
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
   }
 }
 
@@ -129,7 +83,7 @@ class TerminalCommand {
   }
 
   setupPrompt(terminal) {
-    const body = terminal.querySelector('.terminal-body');
+    const body = terminal.querySelector('.terminal-window-content');
     const prompt = this.createPrompt();
     body.appendChild(prompt);
 
@@ -145,18 +99,25 @@ class TerminalCommand {
 
   createPrompt() {
     const div = document.createElement('div');
-    div.className = 'terminal-prompt-line';
+    div.className = 'hero-command-line';
 
-    const promptText = document.createElement('span');
-    promptText.className = 'terminal-prompt';
-    promptText.textContent = 'user@sudo-shop:~$ ';
+    const promptWrapper = document.createElement('div');
+    promptWrapper.className = 'command-prompt';
+    promptWrapper.innerHTML = `
+      <span class="user">user</span>
+      <span class="directory">@terminal</span>
+      <span class="prompt-symbol">:</span>
+      <span class="directory">~</span>
+      <span class="prompt-symbol">$</span>
+    `;
 
     const input = document.createElement('input');
-    input.className = 'terminal-input';
+    input.className = 'hero-command-input input-field';
     input.type = 'text';
     input.autocomplete = 'off';
+    input.placeholder = 'Type \'help\' for commands...';
 
-    div.appendChild(promptText);
+    div.appendChild(promptWrapper);
     div.appendChild(input);
 
     return { div, input };
@@ -171,35 +132,39 @@ class TerminalCommand {
     switch (cmdLower) {
       case 'help':
         output.innerHTML = `
-          Available commands:<br>
-          help - Show this help message<br>
-          ls - List products<br>
-          about - About us<br>
-          contact - Contact information<br>
-          clear - Clear terminal
+          <p class="terminal-output-text">Available commands:</p>
+          <ul style="list-style: none; padding: 0;">
+            <li class="terminal-output-text">help - Show this help message</li>
+            <li class="terminal-output-text">shop - Browse products</li>
+            <li class="terminal-output-text">about - About us</li>
+            <li class="terminal-output-text">contact - Contact information</li>
+            <li class="terminal-output-text">clear - Clear terminal</li>
+          </ul>
         `;
         break;
-      case 'ls':
+      case 'shop':
         output.innerHTML = `
-          Products:<br>
-          > mechanical-keyboard<br>
-          > rgb-mouse<br>
-          > ultrawide-monitor<br>
-          > noise-canceling-headphones<br>
-          > gaming-laptop<br>
-          > smartwatch
+          <p class="terminal-output-text success">[SUCCESS] Redirecting to shop...</p>
         `;
+        setTimeout(() => {
+          window.location.href = '/collections/all';
+        }, 1000);
         break;
       case 'about':
-        output.textContent = 'Sudo Shop - Premium tech products for developers and sysadmins.';
+        output.innerHTML = `
+          <p class="terminal-output-text success">[SUCCESS] Redirecting to about...</p>
+        `;
+        setTimeout(() => {
+          window.location.href = '/pages/about';
+        }, 1000);
         break;
       case 'contact':
         output.innerHTML = `
-          Contact:<br>
-          Email: root@sudoshop.dev<br>
-          GitHub: @sudoshop<br>
-          Discord: sudo-shop-community
+          <p class="terminal-output-text success">[SUCCESS] Redirecting to contact...</p>
         `;
+        setTimeout(() => {
+          window.location.href = '/pages/contact';
+        }, 1000);
         break;
       case 'clear':
         const outputs = body.querySelectorAll('.terminal-output');
@@ -208,8 +173,9 @@ class TerminalCommand {
       case '':
         break;
       default:
-        output.className = 'terminal-output error';
-        output.textContent = `Command not found: ${command}. Type 'help' for available commands.`;
+        output.innerHTML = `
+          <p class="terminal-output-text error">[ERROR] Command not found: ${command}. Type 'help' for available commands.</p>
+        `;
     }
 
     if (cmdLower !== '' && cmdLower !== 'clear') {
@@ -231,36 +197,34 @@ class TerminalProductCard {
 
   animateCard(card) {
     card.addEventListener('mouseenter', () => {
-      card.style.transform = 'translateY(-5px)';
-      card.style.borderColor = 'var(--terminal-accent)';
+      card.style.borderColor = 'var(--accent-primary)';
     });
 
     card.addEventListener('mouseleave', () => {
-      card.style.transform = 'translateY(0)';
-      card.style.borderColor = 'var(--terminal-border)';
+      card.style.borderColor = 'var(--border-color)';
     });
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  new TerminalEffect();
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    new TerminalEffect();
+  }
   new TerminalCommand();
   new TerminalProductCard();
 });
 
-// Add to cart animation
 function addToCart(productId) {
   const output = document.createElement('div');
-  output.className = 'terminal-output success';
-  output.innerHTML = `[SUCCESS] Product ${productId} added to cart`;
+  output.className = 'terminal-output';
+  output.innerHTML = `<p class="terminal-output-text success">[SUCCESS] Product added to cart</p>`;
   
-  const terminal = document.querySelector('.terminal-window .terminal-body');
-  if (terminal) {
-    terminal.appendChild(output);
-    terminal.scrollTop = terminal.scrollHeight;
+  const heroTerminal = document.querySelector('.hero-boot-output');
+  if (heroTerminal) {
+    heroTerminal.appendChild(output);
+    heroTerminal.scrollTop = heroTerminal.scrollHeight;
   }
 
-  // Trigger fetch to Shopify cart
   fetch(`${window.routes.cart_add_url}`, {
     method: 'POST',
     headers: {
@@ -277,8 +241,20 @@ function addToCart(productId) {
   .then(response => response.json())
   .then(data => {
     if (data.status) {
-      output.className = 'terminal-output error';
-      output.textContent = `[ERROR] ${data.description}`;
+      const errorOutput = document.createElement('div');
+      errorOutput.className = 'terminal-output';
+      errorOutput.innerHTML = `<p class="terminal-output-text error">[ERROR] ${data.description}</p>`;
+      
+      if (heroTerminal) {
+        heroTerminal.appendChild(errorOutput);
+        heroTerminal.scrollTop = heroTerminal.scrollHeight;
+      }
+    } else {
+      const cartCount = document.querySelector('.cart-count');
+      if (cartCount) {
+        const currentCount = parseInt(cartCount.textContent.replace(/\D/g, ''));
+        cartCount.textContent = `[${currentCount + 1}]`;
+      }
     }
   })
   .catch(error => {
@@ -286,12 +262,10 @@ function addToCart(productId) {
   });
 }
 
-// Format price with terminal style
 function formatPrice(price) {
   return `$${(price / 100).toFixed(2)}`;
 }
 
-// Animate product loading
 function animateProducts() {
   const products = document.querySelectorAll('.product-card');
   products.forEach((product, index) => {
@@ -306,12 +280,12 @@ function animateProducts() {
   });
 }
 
-// Initialize on page load
 window.addEventListener('load', () => {
-  animateProducts();
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    animateProducts();
+  }
 });
 
-// Export functions for use in templates
 window.TerminalTheme = {
   addToCart,
   formatPrice,

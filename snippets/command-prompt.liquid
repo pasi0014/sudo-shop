@@ -1,0 +1,15 @@
+{%- comment -%}
+  Command Prompt Component
+  Usage:
+    {% render 'command-prompt', user: 'user', directory: '~/projects', command: 'npm start' %}
+{%- endcomment -%}
+
+<div class="command-prompt{% if class %} {{ class }}{% endif %}">
+  <span class="user">{{ user | default: 'user' }}@terminal</span>
+  <span class="directory">:{{ directory | default: '~' }}</span>
+  <span class="prompt-symbol">$</span>
+  {% if command %}
+    <span>{{ command }}</span>
+  {% endif %}
+  <span class="cursor"></span>
+</div>

@@ -1,0 +1,15 @@
+{%- comment -%}
+  Terminal Button Component
+  Usage:
+    {% render 'terminal-button', text: 'Execute', type: 'primary', url: '#' %}
+{%- endcomment -%}
+
+{% if url %}
+  <a href="{{ url }}" class="btn btn-{{ type | default: 'primary' }}{% if class %} {{ class }}{% endif %}" {% if external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+    {{ text }}
+  </a>
+{% else %}
+  <button type="{{ type_attr | default: 'button' }}" class="btn btn-{{ type | default: 'primary' }}{% if class %} {{ class }}{% endif %}" {% if onclick %}onclick="{{ onclick }}"{% endif %}>
+    {{ text }}
+  </button>
+{% endif %}
