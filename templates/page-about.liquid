@@ -1,0 +1,63 @@
+<div class="container" style="padding-top: var(--spacing-2xl); padding-bottom: var(--spacing-3xl);">
+  
+  <!-- Hero -->
+  <div style="max-width: 800px; margin-bottom: var(--spacing-3xl);">
+    <div class="command-prompt" style="margin-bottom: var(--spacing-lg);">
+      <span class="prompt-symbol">$</span> cat ./about/README.md
+    </div>
+    
+    <h1 style="font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; margin-bottom: var(--spacing-lg);" class="glitch">
+      $ whoami
+    </h1>
+    
+    <div style="font-size: 1.125rem; color: var(--color-text-secondary); margin-bottom: var(--spacing-xl);">
+      <p style="margin-bottom: var(--spacing-sm);">&gt; We are a team of tech enthusiasts building the ultimate tech store</p>
+      <p style="margin-bottom: var(--spacing-sm);">&gt; Curating premium hardware for developers, hackers, and makers</p>
+      <p>&gt; Est. {{ 'now' | date: '%Y' }} - Built by nerds, for nerds</p>
+    </div>
+  </div>
+  
+  <!-- Mission & Vision -->
+  <div style="margin-bottom: var(--spacing-3xl);">
+    <div class="command-prompt" style="margin-bottom: var(--spacing-lg);">
+      <span class="prompt-symbol">$</span> ./mission --verbose
+    </div>
+    <div style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: var(--spacing-xl);">
+      Output: Loading mission statement...
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-xl);">
+      
+      <div class="terminal-window" style="padding: var(--spacing-lg);">
+        <div style="font-size: 0.75rem; color: var(--color-secondary); margin-bottom: var(--spacing-md);">[MISSION]</div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--spacing-md);">Our Purpose</h2>
+        <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6;">
+          {{ page.content | strip_html | truncate: 250 }}
+        </p>
+      </div>
+      
+      <div class="terminal-window" style="padding: var(--spacing-lg);">
+        <div style="font-size: 0.75rem; color: var(--color-primary); margin-bottom: var(--spacing-md);">[VISION]</div>
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--spacing-md);">Our Vision</h2>
+        <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6;">
+          To become the go-to destination for tech professionals seeking premium hardware. Every product tested and approved by developers.
+        </p>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Full Content -->
+  <div style="max-width: 800px; margin: 0 auto;">
+    <div class="terminal-window" style="padding: var(--spacing-2xl);">
+      <div class="command-prompt" style="margin-bottom: var(--spacing-lg);">
+        <span class="prompt-symbol">$</span> less ./about/full-story.txt
+      </div>
+      <div style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.8;">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+  
+</div>
+

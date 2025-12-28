@@ -1,25 +1,151 @@
-{
-  "sections": {
-    "hero": {
-      "type": "hero",
-      "settings": {
-        "full_width": true,
-        "show_command_line": true,
-        "show_stats": true
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "heading": "Featured Products",
-        "collection": "frontpage",
-        "products_to_show": 8,
-        "show_view_all": true
-      }
-    }
-  },
-  "order": [
-    "hero",
-    "featured_collection"
-  ]
-}
+<!-- Hero Section -->
+<section class="terminal-window" style="position: relative; border-radius: 0; border-left: none; border-right: none; border-top: none; overflow: hidden;">
+  
+  <!-- Grid Background -->
+  <div style="position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(0, 255, 136, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 255, 136, 0.1) 1px, transparent 1px); background-size: 4rem 4rem; mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 70%, transparent 100%); opacity: 0.2;"></div>
+  
+  <div class="container" style="padding-top: var(--spacing-3xl); padding-bottom: var(--spacing-3xl); position: relative;">
+    <div style="max-width: 800px;">
+      
+      <!-- Command Line -->
+      <div class="command-prompt" style="margin-bottom: var(--spacing-lg);">
+        <span class="prompt-user">user@terminal</span><span class="prompt-dir">:~/shop</span><span class="prompt-symbol">$</span> sudo shop --tech-products
+      </div>
+      
+      <!-- Hero Title -->
+      <h1 style="font-size: clamp(2rem, 8vw, 4rem); font-weight: 700; margin-bottom: var(--spacing-lg);" class="glitch">
+        TECH_STORE.SH
+      </h1>
+      
+      <!-- Hero Description -->
+      <div style="font-size: 1.125rem; color: var(--color-text-secondary); margin-bottom: var(--spacing-xl);">
+        <p style="margin-bottom: var(--spacing-sm);">&gt; Premium tech products for developers</p>
+        <p style="margin-bottom: var(--spacing-sm);">&gt; Curated hardware & accessories</p>
+        <p>&gt; Fast shipping, zero hassle</p>
+      </div>
+      
+      <!-- CTA Buttons -->
+      <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-md);">
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn-primary">
+          ls ./products <span style="margin-left: 8px;">→</span>
+        </a>
+        <a href="/pages/about" class="btn btn-secondary">
+          man techstore
+        </a>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Scan Line Effect -->
+  <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: 0.1;">
+    <div class="scan-line"></div>
+  </div>
+  
+</section>
+
+<!-- Featured Products -->
+{% if collections.frontpage.products.size > 0 %}
+<section class="terminal-content py-8">
+  <div class="container">
+    
+    <div class="command-prompt">
+      <span class="prompt-user">user@terminal</span><span class="prompt-dir">:~/products</span><span class="prompt-symbol">$</span> cat featured.log
+    </div>
+    <div style="font-size: 0.875rem; color: var(--color-text-muted); margin-bottom: var(--spacing-lg);">
+      Output: Displaying top products...
+    </div>
+    
+    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-xl);">Featured Products</h2>
+    
+    <div class="product-grid">
+      {% for product in collections.frontpage.products limit: 6 %}
+        {% render 'product-card', product: product %}
+      {% endfor %}
+    </div>
+    
+    <div style="margin-top: var(--spacing-2xl); text-align: center;">
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn-secondary">
+        find . -name "*.product" <span style="margin-left: 8px; color: var(--color-secondary);">→</span>
+      </a>
+    </div>
+    
+  </div>
+</section>
+{% endif %}
+
+<!-- Features Section -->
+<section class="terminal-window" style="border-radius: 0; border-left: none; border-right: none;">
+  <div class="terminal-content py-8">
+    <div class="container">
+      
+      <div class="command-prompt">
+        <span class="prompt-user">user@terminal</span><span class="prompt-dir">:~/info</span><span class="prompt-symbol">$</span> grep -r 'features' .
+      </div>
+      
+      <h2 style="font-size: 2rem; font-weight: 700; margin-top: var(--spacing-md); margin-bottom: var(--spacing-xl);">System Features</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-lg);">
+        
+        <!-- Feature 1 -->
+        <div class="terminal-window" style="padding: var(--spacing-lg);">
+          <div class="command-prompt" style="margin-bottom: var(--spacing-md);">
+            <span class="prompt-symbol">$</span> ./run secure-checkout.sh
+          </div>
+          <div style="font-size: 0.75rem; color: var(--color-primary); margin-bottom: var(--spacing-md);">[OK] Process completed</div>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--spacing-sm);">Secure Transactions</h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Military-grade encryption for all payments</p>
+        </div>
+        
+        <!-- Feature 2 -->
+        <div class="terminal-window" style="padding: var(--spacing-lg);">
+          <div class="command-prompt" style="margin-bottom: var(--spacing-md);">
+            <span class="prompt-symbol">$</span> ./run fast-shipping.sh
+          </div>
+          <div style="font-size: 0.75rem; color: var(--color-primary); margin-bottom: var(--spacing-md);">[OK] Process completed</div>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--spacing-sm);">Express Delivery</h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Same-day processing, rapid fulfillment</p>
+        </div>
+        
+        <!-- Feature 3 -->
+        <div class="terminal-window" style="padding: var(--spacing-lg);">
+          <div class="command-prompt" style="margin-bottom: var(--spacing-md);">
+            <span class="prompt-symbol">$</span> ./run support-247.sh
+          </div>
+          <div style="font-size: 0.75rem; color: var(--color-primary); margin-bottom: var(--spacing-md);">[OK] Process completed</div>
+          <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: var(--spacing-sm);">24/7 Support</h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-secondary);">Always-on technical assistance</p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter CTA -->
+<section class="terminal-content py-8">
+  <div class="container">
+    <div style="max-width: 640px; margin: 0 auto;">
+      <div class="terminal-window" style="padding: var(--spacing-2xl);">
+        
+        <div class="command-prompt" style="margin-bottom: var(--spacing-lg);">
+          <span class="prompt-symbol">$</span> echo $NEWSLETTER_SIGNUP
+        </div>
+        
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--spacing-md); text-align: center;">Subscribe to Updates</h2>
+        <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: var(--spacing-lg); text-align: center;">
+          Get notifications about new products and exclusive deals
+        </p>
+        
+        {% form 'customer' %}
+          <div style="display: flex; gap: var(--spacing-sm);">
+            <input type="email" name="contact[email]" class="input" placeholder="user@email.com" required style="flex: 1;">
+            <button type="submit" class="btn btn-primary">./subscribe</button>
+          </div>
+        {% endform %}
+        
+      </div>
+    </div>
+  </div>
+</section>
+

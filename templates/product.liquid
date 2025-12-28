@@ -1,0 +1,227 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<div class="container" style="padding-top: var(--spacing-2xl); padding-bottom: var(--spacing-3xl);">
+  
+  <!-- Breadcrumb -->
+  <div style="margin-bottom: var(--spacing-lg); font-size: 0.875rem;">
+    <div class="command-prompt">
+      <span class="prompt-user">user@terminal</span><span class="prompt-dir">:~</span><span class="prompt-symbol">$</span> cd 
+      <a href="{{ routes.root_url }}" style="color: var(--color-secondary);">home</a>
+      <span style="color: var(--color-text-muted);">/</span>
+      <a href="{{ routes.collections_url }}" style="color: var(--color-secondary);">products</a>
+      <span style="color: var(--color-text-muted);">/</span>
+      <span style="color: var(--color-primary);">{{ product.handle }}</span>
+    </div>
+  </div>
+  
+  <!-- Product Content -->
+  <div style="display: grid; grid-template-columns: 1fr; gap: var(--spacing-3xl);">
+    
+    <!-- Left Column: Images -->
+    <div style="grid-column: 1; max-width: 600px;">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="terminal-controls">
+              <span class="terminal-control red"></span>
+              <span class="terminal-control yellow"></span>
+              <span class="terminal-control green"></span>
+            </div>
+            <span class="terminal-title">{{ product.handle }}.img</span>
+          </div>
+        </div>
+        <div style="padding: var(--spacing-lg);">
+          <div style="position: relative; aspect-ratio: 1; background: var(--color-background);">
+            {% if product.featured_image %}
+              <img 
+                src="{{ product.featured_image | img_url: '1000x1000' }}" 
+                alt="{{ product.title | escape }}"
+                style="width: 100%; height: 100%; object-fit: cover;"
+                id="main-product-image"
+              >
+            {% else %}
+              <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-center; color: var(--color-text-muted);">
+                <span style="font-size: 5rem;">◼</span>
+              </div>
+            {% endif %}
+          </div>
+          
+          <!-- Thumbnails -->
+          {% if product.images.size > 1 %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: var(--spacing-sm); margin-top: var(--spacing-md);">
+              {% for image in product.images limit: 4 %}
+                <button 
+                  onclick="document.getElementById('main-product-image').src='{{ image | img_url: '1000x1000' }}'"
+                  style="aspect-ratio: 1; border: 1px solid var(--color-border); background: var(--color-background); padding: 0; cursor: pointer; transition: border-color var(--transition);"
+                  onmouseover="this.style.borderColor='var(--color-primary)'"
+                  onmouseout="this.style.borderColor='var(--color-border)'"
+                >
+                  <img src="{{ image | img_url: '200x200' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Product Info -->
+    <div style="grid-column: 1;">
+      <div class="terminal-window">
+        <div class="terminal-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="terminal-controls">
+              <span class="terminal-control red"></span>
+              <span class="terminal-control yellow"></span>
+              <span class="terminal-control green"></span>
+            </div>
+            <span class="terminal-title">product-info.txt</span>
+          </div>
+        </div>
+        <div class="terminal-content">
+          
+          <div class="command-prompt" style="margin-bottom: var(--spacing-lg);">
+            <span class="prompt-symbol">$</span> cat ./products/{{ product.handle }}.txt
+          </div>
+          
+          <h1 style="font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: var(--spacing-md);">
+            {{ product.title }}
+          </h1>
+          
+          <div style="font-size: 2rem; font-weight: 700; color: var(--color-primary); margin-bottom: var(--spacing-xl);">
+            {{ current_variant.price | money }}
+          </div>
+          
+          {% if product.description != blank %}
+            <div style="padding: var(--spacing-lg); background: var(--color-background); border: 1px solid var(--color-border); margin-bottom: var(--spacing-xl);">
+              <div style="font-size: 0.75rem; color: var(--color-secondary); margin-bottom: var(--spacing-sm);">[DESCRIPTION]</div>
+              <div style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6;">
+                {{ product.description }}
+              </div>
+            </div>
+          {% endif %}
+          
+          <!-- Add to Cart Form -->
+          {% form 'product', product, id: 'product-form' %}
+            
+            <!-- Variant Selector -->
+            {% unless product.has_only_default_variant %}
+              <div style="margin-bottom: var(--spacing-lg);">
+                <label style="display: block; font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: var(--spacing-sm);">
+                  Select Option:
+                </label>
+                <select 
+                  name="id" 
+                  class="input"
+                  onchange="updatePrice(this)"
+                >
+                  {% for variant in product.variants %}
+                    <option 
+                      value="{{ variant.id }}"
+                      {% if variant == current_variant %}selected{% endif %}
+                      {% unless variant.available %}disabled{% endunless %}
+                      data-price="{{ variant.price | money }}"
+                    >
+                      {{ variant.title }} - {{ variant.price | money }}
+                      {% unless variant.available %} (Out of Stock){% endunless %}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+            {% else %}
+              <input type="hidden" name="id" value="{{ current_variant.id }}">
+            {% endunless %}
+            
+            <!-- Quantity -->
+            <div style="margin-bottom: var(--spacing-lg);">
+              <label style="display: block; font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: var(--spacing-sm);">
+                Quantity:
+              </label>
+              <input 
+                type="number" 
+                name="quantity" 
+                value="1" 
+                min="1" 
+                class="input"
+                style="width: 120px;"
+              >
+            </div>
+            
+            <!-- Add to Cart Button -->
+            <button 
+              type="submit" 
+              class="btn btn-primary"
+              style="width: 100%; font-size: 1rem; padding: 16px;"
+              {% unless current_variant.available %}disabled{% endunless %}
+            >
+              {% if current_variant.available %}
+                $ ./add-to-cart
+              {% else %}
+                OUT_OF_STOCK
+              {% endif %}
+            </button>
+            
+          {% endform %}
+          
+          <!-- Product Meta -->
+          <div style="margin-top: var(--spacing-xl); padding-top: var(--spacing-xl); border-top: 1px solid var(--color-border);">
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); space-y: var(--spacing-sm);">
+              {% if product.vendor != blank %}
+                <div><span style="color: var(--color-secondary);">Vendor:</span> {{ product.vendor }}</div>
+              {% endif %}
+              {% if product.type != blank %}
+                <div><span style="color: var(--color-secondary);">Type:</span> {{ product.type }}</div>
+              {% endif %}
+              <div><span style="color: var(--color-secondary);">SKU:</span> {{ current_variant.sku | default: 'N/A' }}</div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+
+<script>
+  function updatePrice(select) {
+    const option = select.options[select.selectedIndex];
+    const price = option.dataset.price;
+    // You can update displayed price here if needed
+  }
+  
+  // Handle add to cart
+  document.getElementById('product-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    fetch('/cart/add.js', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Update cart count
+      updateCartCount();
+      // Show confirmation
+      alert('Added to cart!');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
+
+@media (min-width: 768px) {
+  .container > div {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .container > div > div:first-child {
+    grid-column: 1 !important;
+  }
+  .container > div > div:last-child {
+    grid-column: 2 !important;
+  }
+}
+

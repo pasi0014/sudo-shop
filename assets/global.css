@@ -1,2 +1,0 @@
-{{ 'base.css' | asset_url | stylesheet_tag }}
-{{ 'terminal.css' | asset_url | stylesheet_tag }}

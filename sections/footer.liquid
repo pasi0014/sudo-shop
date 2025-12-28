@@ -1,117 +1,97 @@
-{%- comment -%}
-  Footer - Terminal CLI Design System
-{%- endcomment -%}
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="terminal-window">
-      <div class="terminal-header-bar">
-        <div class="terminal-window-controls">
-          <div class="terminal-control close" aria-hidden="true"></div>
-          <div class="terminal-control minimize" aria-hidden="true"></div>
-          <div class="terminal-control maximize" aria-hidden="true"></div>
-        </div>
-        <p class="terminal-window-title">~/footer</p>
+<footer class="terminal-window" style="border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+  <div class="terminal-content" style="padding: var(--spacing-2xl) 0;">
+    <div class="container">
+      
+      <!-- Footer Command -->
+      <div class="command-prompt" style="margin-bottom: var(--spacing-xl);">
+        <span class="prompt-user">user@terminal</span><span class="prompt-dir">:~/</span><span class="prompt-symbol">$</span> cat ./footer/info.txt
       </div>
-      <div class="terminal-window-content">
-        <div class="footer-grid">
-          <div class="footer-brand">
-            <h3 class="footer-heading">
-              <span class="prompt-symbol">></span> sudo-shop
-            </h3>
-            <p class="footer-description">
-              Premium tech products for developers, sysadmins, and tech enthusiasts.
-              Quality gear for those who live and breathe code.
-            </p>
-            {% if section.settings.show_social %}
-              <div class="footer-social">
-                {% if settings.social_twitter_link != blank %}
-                  <a href="{{ settings.social_twitter_link }}" class="social-link link" aria-label="Twitter">
-                    TWITTER
-                  </a>
-                {% endif %}
-                {% if settings.social_facebook_link != blank %}
-                  <a href="{{ settings.social_facebook_link }}" class="social-link link" aria-label="Facebook">
-                    FACEBOOK
-                  </a>
-                {% endif %}
-                {% if settings.social_instagram_link != blank %}
-                  <a href="{{ settings.social_instagram_link }}" class="social-link link" aria-label="Instagram">
-                    INSTAGRAM
-                  </a>
-                {% endif %}
-                {% if settings.social_youtube_link != blank %}
-                  <a href="{{ settings.social_youtube_link }}" class="social-link link" aria-label="YouTube">
-                    YOUTUBE
-                  </a>
-                {% endif %}
-              </div>
-            {% endif %}
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-2xl); margin-bottom: var(--spacing-2xl);">
+        
+        <!-- Brand Column -->
+        <div>
+          <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--spacing-md); color: var(--color-primary);">
+            $ techstore.sh
+          </h3>
+          <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.6;">
+            Premium tech products for developers. Curated by nerds, for nerds.
+          </p>
+          <div style="margin-top: var(--spacing-md); font-size: 0.75rem; color: var(--color-text-muted);">
+            Est. {{ 'now' | date: '%Y' }}
           </div>
-
-          {% for block in section.blocks %}
-            <div class="footer-section" {{ block.shopify_attributes }}>
-              {% if block.type == 'link_list' %}
-                <h3 class="footer-heading">
-                  <span class="prompt-symbol">></span> {{ block.settings.heading }}
-                </h3>
-                <ul class="footer-links">
-                  {% for link in block.settings.menu.links %}
-                    <li>
-                      <a href="{{ link.url }}" class="link">{{ link.title }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% elsif block.type == 'text' %}
-                <h3 class="footer-heading">
-                  <span class="prompt-symbol">></span> {{ block.settings.heading }}
-                </h3>
-                <div class="footer-text">
-                  {{ block.settings.text }}
-                </div>
-              {% elsif block.type == 'newsletter' %}
-                <h3 class="footer-heading">
-                  <span class="prompt-symbol">></span> {{ block.settings.heading }}
-                </h3>
-                <div class="footer-newsletter">
-                  <p class="newsletter-description text-muted small">{{ block.settings.text }}</p>
-                  {% form 'customer' %}
-                    <input type="hidden" name="contact[tags]" value="newsletter">
-                    <div class="input-wrapper">
-                      <input 
-                        type="email" 
-                        name="contact[email]" 
-                        placeholder="{{ 'general.newsletter.email_placeholder' | t }}"
-                        class="input-field"
-                        required
-                      >
-                    </div>
-                    <button type="submit" class="btn btn-secondary">
-                      Subscribe
-                    </button>
-                  {% endform %}
-                </div>
-              {% endif %}
-            </div>
-          {% endfor %}
         </div>
-
-        <div class="footer-bottom">
-          <div class="footer-copyright text-muted small">
-            <span class="prompt-symbol">$</span> 
-            &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
-          </div>
-          
-          {% if section.settings.show_payment_icons %}
-            <div class="footer-payment">
-              <span class="text-muted small">[PAYMENT]</span>
-              {% for type in shop.enabled_payment_types %}
-                {{ type | payment_type_svg_tag: class: 'payment-icon' }}
-              {% endfor %}
-            </div>
-          {% endif %}
+        
+        <!-- Shop Column -->
+        <div>
+          <div style="font-size: 0.75rem; color: var(--color-secondary); margin-bottom: var(--spacing-sm);">[SHOP]</div>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+            <li style="margin-bottom: var(--spacing-sm);">
+              <a href="{{ routes.all_products_collection_url }}" style="color: var(--color-text-secondary);">
+                <span style="color: var(--color-secondary);">./</span>products
+              </a>
+            </li>
+            {% for link in linklists.footer.links %}
+              <li style="margin-bottom: var(--spacing-sm);">
+                <a href="{{ link.url }}" style="color: var(--color-text-secondary);">
+                  <span style="color: var(--color-secondary);">./</span>{{ link.title | downcase }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <!-- Support Column -->
+        <div>
+          <div style="font-size: 0.75rem; color: var(--color-secondary); margin-bottom: var(--spacing-sm);">[SUPPORT]</div>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+            <li style="margin-bottom: var(--spacing-sm);">
+              <a href="/pages/contact" style="color: var(--color-text-secondary);">
+                <span style="color: var(--color-secondary);">./</span>contact
+              </a>
+            </li>
+            <li style="margin-bottom: var(--spacing-sm);">
+              <a href="/pages/shipping" style="color: var(--color-text-secondary);">
+                <span style="color: var(--color-secondary);">./</span>shipping
+              </a>
+            </li>
+            <li style="margin-bottom: var(--spacing-sm);">
+              <a href="/pages/returns" style="color: var(--color-text-secondary);">
+                <span style="color: var(--color-secondary);">./</span>returns
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Legal Column -->
+        <div>
+          <div style="font-size: 0.75rem; color: var(--color-secondary); margin-bottom: var(--spacing-sm);">[LEGAL]</div>
+          <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.875rem;">
+            <li style="margin-bottom: var(--spacing-sm);">
+              <a href="/pages/privacy" style="color: var(--color-text-secondary);">
+                <span style="color: var(--color-secondary);">./</span>privacy
+              </a>
+            </li>
+            <li style="margin-bottom: var(--spacing-sm);">
+              <a href="/pages/terms" style="color: var(--color-text-secondary);">
+                <span style="color: var(--color-secondary);">./</span>terms
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+      
+      <!-- Bottom Bar -->
+      <div style="border-top: 1px solid var(--color-border); padding-top: var(--spacing-lg); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--spacing-md);">
+        <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+          <span style="color: var(--color-primary);">></span> {{ shop.name }} © {{ 'now' | date: '%Y' }} - All rights reserved
+        </div>
+        <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+          Built with <span style="color: var(--color-primary);">❤</span> by developers
         </div>
       </div>
+      
     </div>
   </div>
 </footer>
@@ -119,257 +99,7 @@
 {% schema %}
 {
   "name": "Footer",
-  "tag": "section",
-  "class": "section-footer",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_social",
-      "default": true,
-      "label": "Show social media links"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "default": true,
-      "label": "Show payment icons"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "link_list",
-      "name": "Menu",
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "default": "Quick links",
-          "label": "Heading"
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "default": "footer",
-          "label": "Menu"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "name": "Text",
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "default": "About",
-          "label": "Heading"
-        },
-        {
-          "type": "richtext",
-          "id": "text",
-          "default": "<p>Share store details, promotions, or brand content with your customers.</p>",
-          "label": "Text"
-        }
-      ]
-    },
-    {
-      "type": "newsletter",
-      "name": "Newsletter",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "default": "Newsletter",
-          "label": "Heading"
-        },
-        {
-          "type": "richtext",
-          "id": "text",
-          "default": "<p>Subscribe to get special offers and updates.</p>",
-          "label": "Text"
-        }
-      ]
-    }
-  ],
-  "default": {
-    "blocks": [
-      {
-        "type": "link_list"
-      },
-      {
-        "type": "text"
-      },
-      {
-        "type": "newsletter"
-      }
-    ]
-  }
+  "settings": []
 }
 {% endschema %}
 
-{% stylesheet %}
-.site-footer {
-  padding: var(--spacing-64) 0 var(--spacing-32);
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-32);
-  margin-bottom: var(--spacing-32);
-}
-
-@media (min-width: 750px) {
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 990px) {
-  .footer-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-16);
-}
-
-.footer-heading {
-  font-size: 1.125rem;
-  margin: 0 0 var(--spacing-16) 0;
-  color: var(--accent-primary);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-8);
-}
-
-.footer-description {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.footer-social {
-  display: flex;
-  gap: var(--spacing-8);
-  flex-wrap: wrap;
-}
-
-.social-link {
-  padding: var(--spacing-8) var(--spacing-16);
-  border: 1px solid var(--border-color);
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-}
-
-.social-link:hover {
-  border-color: var(--accent-primary);
-  background: rgba(0, 255, 136, 0.1);
-}
-
-.footer-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-links li {
-  padding: var(--spacing-8) 0;
-  border-bottom: 1px dashed var(--border-color);
-}
-
-.footer-links li::before {
-  content: '>';
-  color: var(--accent-primary);
-  margin-right: var(--spacing-8);
-}
-
-.footer-links a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: var(--accent-primary);
-}
-
-.footer-text {
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-.footer-newsletter {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-16);
-}
-
-.newsletter-description {
-  margin: 0;
-}
-
-.footer-newsletter .input-wrapper {
-  margin-bottom: var(--spacing-8);
-}
-
-.footer-newsletter .btn {
-  width: 100%;
-}
-
-.footer-bottom {
-  padding-top: var(--spacing-24);
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-16);
-}
-
-@media (min-width: 750px) {
-  .footer-bottom {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.footer-copyright {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-8);
-}
-
-.footer-payment {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-16);
-}
-
-.payment-icon {
-  width: 32px;
-  height: 20px;
-  opacity: 0.7;
-}
-
-@media (max-width: 749px) {
-  .footer-grid {
-    gap: var(--spacing-24);
-  }
-  
-  .social-link {
-    padding: var(--spacing-8) var(--spacing-12);
-    font-size: 0.7rem;
-  }
-  
-  .footer-payment {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}
-{% endstylesheet %}

@@ -1,377 +1,65 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Terminal Theme",
+    "theme_name": "Terminal CLI",
     "theme_version": "1.0.0",
-    "theme_author": "Sudo Shop",
-    "theme_documentation_url": "https://github.com/sudoshop/terminal-theme",
-    "theme_support_url": "https://github.com/sudoshop/terminal-theme/issues"
+    "theme_author": "Tech Store",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
   },
   {
-    "name": "Logo",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "logo",
-        "label": "Logo"
-      },
-      {
-        "type": "range",
-        "id": "logo_width",
-        "min": 50,
-        "max": 300,
-        "step": 10,
-        "default": 100,
-        "unit": "px",
-        "label": "Logo width"
-      }
-    ]
-  },
-  {
-    "name": "Colors",
+    "name": "Terminal Theme",
     "settings": [
       {
         "type": "header",
-        "content": "Terminal colors"
+        "content": "Colors"
       },
       {
         "type": "color",
-        "id": "terminal_bg",
-        "label": "Terminal background",
-        "default": "#0d0d0d"
+        "id": "color_primary",
+        "label": "Primary Accent (Terminal Green)",
+        "default": "#00ff88"
       },
       {
         "type": "color",
-        "id": "terminal_text",
-        "label": "Terminal text",
-        "default": "#00ff00"
+        "id": "color_secondary",
+        "label": "Secondary Accent (Cyan)",
+        "default": "#00d9ff"
       },
       {
         "type": "color",
-        "id": "terminal_accent",
-        "label": "Terminal accent",
-        "default": "#00ff00"
-      },
-      {
-        "type": "color",
-        "id": "terminal_border",
-        "label": "Terminal border",
-        "default": "#333333"
-      },
-      {
-        "type": "header",
-        "content": "Standard colors"
-      },
-      {
-        "type": "color",
+        "id": "color_background",
         "label": "Background",
-        "id": "colors_background_1",
-        "default": "#0d0d0d"
+        "default": "#0a0e14"
       },
       {
         "type": "color",
-        "label": "Background gradient",
-        "id": "colors_background_2",
-        "default": "#0d0d0d"
-      },
-      {
-        "type": "color",
-        "label": "Text",
-        "id": "colors_text",
-        "default": "#00ff00"
-      },
-      {
-        "type": "color",
-        "label": "Accent 1",
-        "id": "colors_accent_1",
-        "default": "#00ff00"
-      },
-      {
-        "type": "color",
-        "label": "Accent 2",
-        "id": "colors_accent_2",
-        "default": "#00ffff"
-      },
-      {
-        "type": "color",
-        "label": "Solid button labels",
-        "id": "colors_solid_button_labels",
-        "default": "#0d0d0d"
-      },
-      {
-        "type": "color",
-        "label": "Outline button labels",
-        "id": "colors_outline_button_labels",
-        "default": "#00ff00"
-      }
-    ]
-  },
-  {
-    "name": "Typography",
-    "settings": [
-      {
-        "type": "font_picker",
-        "id": "type_body_font",
-        "label": "Body font",
-        "default": "courier_new_n4"
-      },
-      {
-        "type": "font_picker",
-        "id": "type_heading_font",
-        "label": "Heading font",
-        "default": "courier_new_n4"
-      },
-      {
-        "type": "range",
-        "id": "body_scale",
-        "min": 75,
-        "max": 125,
-        "step": 5,
-        "default": 100,
-        "label": "Body font scale",
-        "unit": "%"
-      },
-      {
-        "type": "range",
-        "id": "heading_scale",
-        "min": 75,
-        "max": 125,
-        "step": 5,
-        "default": 100,
-        "label": "Heading font scale",
-        "unit": "%"
-      }
-    ]
-  },
-  {
-    "name": "Layout",
-    "settings": [
-      {
-        "type": "range",
-        "id": "page_width",
-        "min": 1000,
-        "max": 1800,
-        "step": 100,
-        "default": 1400,
-        "unit": "px",
-        "label": "Page width"
+        "id": "color_surface",
+        "label": "Surface",
+        "default": "#151b26"
       },
       {
         "type": "header",
-        "content": "Header"
+        "content": "Typography"
       },
       {
-        "type": "select",
-        "id": "header_position",
-        "options": [
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "fixed",
-            "label": "Fixed"
-          }
-        ],
-        "default": "top",
-        "label": "Header position"
-      },
-      {
-        "type": "checkbox",
-        "id": "sticky_header",
-        "default": true,
-        "label": "Enable sticky header"
+        "type": "text",
+        "id": "font_family",
+        "label": "Font Family",
+        "default": "JetBrains Mono, Fira Code, monospace",
+        "info": "Monospace font for terminal aesthetic"
       },
       {
         "type": "header",
-        "content": "Footer"
+        "content": "Boot Screen"
       },
       {
         "type": "checkbox",
-        "id": "show_footer",
-        "default": true,
-        "label": "Show footer"
-      }
-    ]
-  },
-  {
-    "name": "Terminal settings",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Animations"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_typewriter",
-        "default": true,
-        "label": "Enable typewriter effect"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_cursor_blink",
-        "default": true,
-        "label": "Enable cursor blink"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_scanlines",
-        "default": true,
-        "label": "Enable scanlines"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_matrix_rain",
-        "default": false,
-        "label": "Enable Matrix rain background"
-      },
-      {
-        "type": "header",
-        "content": "Sound effects"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_sounds",
-        "default": false,
-        "label": "Enable keyboard sounds"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_boot_sound",
-        "default": false,
-        "label": "Enable boot sequence sound"
-      },
-      {
-        "type": "header",
-        "content": "Advanced"
-      },
-      {
-        "type": "textarea",
-        "id": "custom_css",
-        "label": "Custom CSS",
-        "info": "Add your own CSS to customize the terminal theme"
-      },
-      {
-        "type": "textarea",
-        "id": "custom_js",
-        "label": "Custom JavaScript",
-        "info": "Add your own JavaScript for additional functionality"
-      }
-    ]
-  },
-  {
-    "name": "Social media",
-    "settings": [
-      {
-        "type": "url",
-        "id": "social_twitter_link",
-        "label": "Twitter"
-      },
-      {
-        "type": "url",
-        "id": "social_facebook_link",
-        "label": "Facebook"
-      },
-      {
-        "type": "url",
-        "id": "social_pinterest_link",
-        "label": "Pinterest"
-      },
-      {
-        "type": "url",
-        "id": "social_instagram_link",
-        "label": "Instagram"
-      },
-      {
-        "type": "url",
-        "id": "social_tiktok_link",
-        "label": "TikTok"
-      },
-      {
-        "type": "url",
-        "id": "social_tumblr_link",
-        "label": "Tumblr"
-      },
-      {
-        "type": "url",
-        "id": "social_snapchat_link",
-        "label": "Snapchat"
-      },
-      {
-        "type": "url",
-        "id": "social_youtube_link",
-        "label": "YouTube"
-      },
-      {
-        "type": "url",
-        "id": "social_vimeo_link",
-        "label": "Vimeo"
-      }
-    ]
-  },
-  {
-    "name": "Favicon",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "favicon",
-        "label": "Favicon",
-        "info": "Must be a square PNG"
-      }
-    ]
-  },
-  {
-    "name": "Cart",
-    "settings": [
-      {
-        "type": "select",
-        "id": "cart_type",
-        "options": [
-          {
-            "value": "drawer",
-            "label": "Drawer"
-          },
-          {
-            "value": "page",
-            "label": "Page"
-          },
-          {
-            "value": "popup",
-            "label": "Popup"
-          }
-        ],
-        "default": "drawer",
-        "label": "Cart type"
-      },
-      {
-        "type": "checkbox",
-        "id": "cart_notes_enable",
-        "default": true,
-        "label": "Enable cart notes"
-      }
-    ]
-  },
-  {
-    "name": "Search",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "predictive_search_enabled",
-        "default": true,
-        "label": "Enable predictive search"
-      },
-      {
-        "type": "checkbox",
-        "id": "search_show_vendor",
-        "default": false,
-        "label": "Show vendor"
-      },
-      {
-        "type": "checkbox",
-        "id": "search_show_price",
-        "default": true,
-        "label": "Show price"
+        "id": "enable_boot_screen",
+        "label": "Enable Boot Animation",
+        "default": true
       }
     ]
   }
 ]
+

@@ -1,37 +1,73 @@
+<header class="terminal-window" style="border-radius: 0; border-left: none; border-right: none; border-top: none; position: sticky; top: 0; z-index: 100;">
+  <div class="terminal-header">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between;">
+      
+      <!-- Logo -->
+      <a href="{{ routes.root_url }}" style="display: flex; align-items: center; gap: 8px;">
+        <span style="color: var(--color-primary);">$</span>
+        <span style="font-weight: 600; font-size: 14px;">
+          <span style="color: var(--color-secondary);">tech</span><span style="color: var(--color-primary);">store</span><span style="color: var(--color-text-muted);">.sh</span>
+        </span>
+      </a>
+      
+      <!-- Navigation -->
+      <nav style="display: flex; align-items: center; gap: 24px; font-size: 14px;">
+        <a href="{{ routes.root_url }}" style="color: var(--color-text-secondary);">
+          <span style="color: var(--color-secondary);">./</span>home
+        </a>
+        <a href="{{ routes.collections_url }}/all" style="color: var(--color-text-secondary);">
+          <span style="color: var(--color-secondary);">./</span>products
+        </a>
+        {% for link in linklists.main-menu.links %}
+          <a href="{{ link.url }}" style="color: var(--color-text-secondary);">
+            <span style="color: var(--color-secondary);">./</span>{{ link.title | downcase }}
+          </a>
+        {% endfor %}
+      </nav>
+      
+      <!-- Cart & Time -->
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span id="terminal-time" style="font-size: 12px; color: var(--color-text-muted);"></span>
+        <button id="cart-toggle" style="position: relative; background: none; border: none; color: var(--color-text-secondary); cursor: pointer; padding: 8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 2L7.17 4H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-4.17L15 2H9z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span id="cart-count" style="display: none; position: absolute; top: 0; right: 0; min-width: 16px; height: 16px; padding: 0 4px; background: var(--color-secondary); border-radius: 50%; font-size: 10px; line-height: 16px; text-align: center; color: var(--color-background);"></span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Scan line effect -->
+  <div style="position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.1;">
+    <div class="scan-line"></div>
+  </div>
+</header>
+
+<style>
+  @media (max-width: 768px) {
+    header nav {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  // Update time display
+  function updateTime() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour12: false });
+    document.getElementById('terminal-time').textContent = timeStr;
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>
+
 {% schema %}
 {
   "name": "Header",
-  "tag": "section",
-  "class": "section-header",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "Menu"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo"
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "min": 50,
-      "max": 250,
-      "step": 10,
-      "default": 100,
-      "unit": "px",
-      "label": "Logo width"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "@app"
-    }
-  ]
+  "settings": []
 }
 {% endschema %}
-
-{% render 'header' %}
