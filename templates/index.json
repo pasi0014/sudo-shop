@@ -1,0 +1,35 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "heading_KmNGWU": {
+          "type": "heading",
+          "settings": {
+            "heading": "Premium Tech for Developers",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": ["heading_KmNGWU"],
+      "settings": {
+        "full_width": true,
+        "show_command_line": true,
+        "show_stats": true
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Featured Products",
+        "collection": "frontpage",
+        "products_to_show": 8,
+        "show_view_all": true
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_collection"
+  ]
+}

@@ -1,0 +1,613 @@
+<div class="page-width">
+  <div class="terminal-window">
+    <div class="terminal-header">
+      <div class="terminal-button close"></div>
+      <div class="terminal-button minimize"></div>
+      <div class="terminal-button maximize"></div>
+      <h1 class="terminal-title">~/products/{{ product.handle }}</h1>
+    </div>
+    <div class="terminal-body product-container">
+      <div class="terminal-output">
+        <span class="terminal-prompt">root@sudo-shop:~$</span> cat {{ product.handle }}.info
+      </div>
+
+      <div class="product-wrapper">
+        <div class="product-media-wrapper">
+          {% if product.media.size > 0 %}
+            <div class="product-media">
+              <div class="main-media">
+                <img 
+                  src="{{ product.featured_media | image_url: width: 800 }}"
+                  alt="{{ product.featured_media.alt | escape }}"
+                  id="MainProductImage-{{ section.id }}"
+                  width="{{ product.featured_media.width }}"
+                  height="{{ product.featured_media.height }}"
+                  loading="lazy"
+                  class="product-main-image"
+                >
+              </div>
+
+              {% if product.media.size > 1 %}
+                <div class="product-thumbnails">
+                  {% for media in product.media limit: 6 %}
+                    <button 
+                      class="thumbnail-btn{% if media == product.featured_media %} active{% endif %}"
+                      data-media-id="{{ media.id }}"
+                      aria-label="View {{ media.alt }}"
+                    >
+                      <img 
+                        src="{{ media | image_url: width: 150 }}"
+                        alt="{{ media.alt | escape }}"
+                        width="150"
+                        height="150"
+                        loading="lazy"
+                      >
+                    </button>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% else %}
+            <div class="no-media">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="product-info-wrapper">
+          <div class="product-details">
+            <h1 class="product-title">
+              <span class="terminal-prompt">></span> {{ product.title }}
+            </h1>
+
+            {% if product.vendor != blank %}
+              <div class="product-vendor">
+                <span class="terminal-prompt">></span> 
+                <span class="vendor-label">Vendor:</span> {{ product.vendor }}
+              </div>
+            {% endif %}
+
+            <div class="product-price-wrapper">
+              {% if product.compare_at_price > product.price %}
+                <div class="product-price sale-price">
+                  <span class="terminal-prompt">$</span> 
+                  <span class="price-original">{{ product.compare_at_price | money }}</span>
+                  <span class="price-sale">{{ product.price | money }}</span>
+                  <span class="sale-badge">[ON SALE]</span>
+                </div>
+              {% else %}
+                <div class="product-price">
+                  <span class="terminal-prompt">$</span> 
+                  <span class="price-value">{{ product.price | money }}</span>
+                </div>
+              {% endif %            </div>
+
+            {% if product.description != blank %}
+              <div class="product-description">
+                <div class="description-header">
+                  <span class="terminal-prompt">></span> DESCRIPTION
+                </div>
+                <div class="description-content">
+                  {{ product.description }}
+                </div>
+              </div>
+            {% endif %}
+
+            {% if product.available %}
+              <product-form class="product-form">
+                {%- form 'product', product, id: 'product-form-installment', class: 'installment caption-large' -%}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" disabled>
+                  {{ form | payment_terms }}
+                {%- endform -%}
+
+                {%- assign product_form_id = 'product-form-' | append: section.id -%}
+                {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                  <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}>
+                  
+                  <div class="product-form-wrapper">
+                    {% if product.variants.size > 1 %}
+                      <div class="product-variants">
+                        <div class="variant-selector">
+                          <label for="Variant-{{ section.id }}" class="variant-label">
+                            <span class="terminal-prompt">></span> SELECT VARIANT
+                          </label>
+                          <select 
+                            name="id" 
+                            id="Variant-{{ section.id }}" 
+                            class="variant-select terminal-input"
+                          >
+                            {% for variant in product.variants %}
+                              <option 
+                                value="{{ variant.id }}"
+                                {% if variant == product.selected_or_first_available_variant %}selected{% endif %}
+                                {% unless variant.available %}disabled{% endunless %}
+                              >
+                                {{ variant.title }}
+                                {% if variant.available == false %} - SOLD OUT{% endif %}
+                                {{ variant.price | money }}
+                              </option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    {% endif %}
+
+                    <div class="quantity-wrapper">
+                      <label for="Quantity-{{ section.id }}" class="quantity-label">
+                        <span class="terminal-prompt">></span> QUANTITY
+                      </label>
+                      <quantity-input class="quantity">
+                        <button class="quantity__button no-js-hidden" name="minus" type="button">
+                          <span class="visually-hidden">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-minus" fill="none" viewBox="0 0 10 2"><path fill-rule="evenodd" clip-rule="evenodd" d="M.5 1C.5.7.7.5 1 .5h8a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5z" fill="currentColor"/></svg>
+                        </button>
+                        <input 
+                          class="quantity__input"
+                          type="number"
+                          name="quantity"
+                          id="Quantity-{{ section.id }}"
+                          min="1"
+                          value="1"
+                          form="{{ product_form_id }}"
+                        >
+                        <button class="quantity__button no-js-hidden" name="plus" type="button">
+                          <span class="visually-hidden">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" fill="none" viewBox="0 0 10 10"><path fill-rule="evenodd" clip-rule="evenodd" d="M1 4.51a.5.5 0 0 1 .5-.5h1.5V2.5a.5.5 0 0 1 1 0V4h1.5a.5.5 0 0 1 0 1H4v1.5a.5.5 0 0 1-1 0V5H1.5a.5.5 0 0 1-.5-.5z" fill="currentColor"/></svg>
+                        </button>
+                      </quantity-input>
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      name="add"
+                      class="terminal-button product-form-submit"
+                      {% if product.selected_or_first_available_variant.available == false %}disabled{% endif %}
+                    >
+                      {% if product.selected_or_first_available_variant.available %}
+                        <span>[+] ADD TO CART</span>
+                      {% else %}
+                        <span>[!] SOLD OUT</span>
+                      {% endif %}
+                    </button>
+                  </div>
+                {%- endform -%}
+              </product-form>
+            {% else %}
+              <div class="terminal-output error">
+                <span class="terminal-prompt">></span> [ERROR] This product is currently out of stock
+              </div>
+            {% endif %}
+
+            {% if section.settings.show_pickup_availability %}
+              <div class="pickup-availability">
+                {% render 'pickup-availability', product_variants: product.variants, pick_up_availabilities: product.store_availabilities %}
+              </div>
+            {% endif %}
+
+            <div class="product-meta">
+              {% if section.settings.show_sku and product.selected_or_first_available_variant.sku != blank %}
+                <div class="meta-item">
+                  <span class="terminal-prompt">></span> 
+                  <span class="meta-label">SKU:</span> {{ product.selected_or_first_available_variant.sku }}
+                </div>
+              {% endif %}
+
+              {% if section.settings.show_type and product.type != blank %}
+                <div class="meta-item">
+                  <span class="terminal-prompt">></span> 
+                  <span class="meta-label">Type:</span> {{ product.type }}
+                </div>
+              {% endif %}
+
+              {% if section.settings.show_tags and product.tags.size > 0 %}
+                <div class="meta-item">
+                  <span class="terminal-prompt">></span> 
+                  <span class="meta-label">Tags:</span>
+                  {% for tag in product.tags limit: 5 %}
+                    <span class="tag">{{ tag }}</span>{% unless forloop.last %}, {% endunless %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": "section",
+  "class": "product-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_pickup_availability",
+      "default": true,
+      "label": "Show pickup availability"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "default": true,
+      "label": "Show SKU"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_type",
+      "default": true,
+      "label": "Show type"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "default": true,
+      "label": "Show tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_info",
+      "default": true,
+      "label": "Enable sticky product info"
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large",
+      "label": "Media size"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.product-container {
+  margin: 2rem auto;
+}
+
+.product-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 990px) {
+  .product-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.product-media-wrapper {
+  position: relative;
+}
+
+.product-media {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.main-media {
+  border: 1px solid var(--terminal-border);
+  overflow: hidden;
+}
+
+.product-main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+}
+
+.thumbnail-btn {
+  border: 1px solid var(--terminal-border);
+  background: transparent;
+  padding: 0.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.thumbnail-btn:hover,
+.thumbnail-btn.active {
+  border-color: var(--terminal-accent);
+  box-shadow: 0 0 10px var(--glow-color);
+}
+
+.thumbnail-btn img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.no-media {
+  border: 1px solid var(--terminal-border);
+  padding: 4rem;
+  text-align: center;
+  color: var(--terminal-text-dim);
+}
+
+.product-info-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.product-title {
+  font-size: 1.8rem;
+  margin: 0;
+  color: var(--terminal-accent);
+}
+
+@media (min-width: 750px) {
+  .product-title {
+    font-size: 2.2rem;
+  }
+}
+
+.product-vendor {
+  color: var(--terminal-info);
+  font-size: 0.9rem;
+}
+
+.vendor-label {
+  text-transform: uppercase;
+  margin-right: 0.5rem;
+}
+
+.product-price-wrapper {
+  padding: 1rem;
+  background: #1a1a1a;
+  border: 1px solid var(--terminal-border);
+}
+
+.product-price {
+  font-size: 2rem;
+  color: var(--terminal-accent);
+}
+
+.price-original {
+  text-decoration: line-through;
+  color: var(--terminal-text-dim);
+  margin-right: 1rem;
+}
+
+.price-sale {
+  font-weight: bold;
+}
+
+.sale-badge {
+  color: var(--terminal-warning);
+  margin-left: 1rem;
+}
+
+.product-description {
+  padding: 1rem;
+  border-left: 2px solid var(--terminal-accent);
+}
+
+.description-header {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--terminal-accent);
+}
+
+.description-content {
+  color: var(--terminal-text-dim);
+  line-height: 1.6;
+}
+
+.product-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-variants {
+  margin-bottom: 1rem;
+}
+
+.variant-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.variant-label {
+  font-weight: bold;
+  color: var(--terminal-accent);
+}
+
+.variant-select {
+  background: #1a1a1a;
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text);
+  padding: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.variant-select:focus {
+  border-color: var(--terminal-accent);
+  box-shadow: 0 0 10px var(--glow-color);
+}
+
+.quantity-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quantity-label {
+  font-weight: bold;
+  color: var(--terminal-accent);
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--terminal-border);
+  max-width: 200px;
+}
+
+.quantity__button {
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  color: var(--terminal-text);
+  transition: all 0.3s ease;
+}
+
+.quantity__button:hover {
+  background: var(--terminal-accent);
+  color: var(--terminal-bg);
+}
+
+.quantity__input {
+  width: 50px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  color: var(--terminal-text);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.product-form-submit {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+.product-form-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.product-meta {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--terminal-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.meta-item {
+  font-size: 0.9rem;
+  color: var(--terminal-text-dim);
+}
+
+.meta-label {
+  font-weight: bold;
+  margin-right: 0.5rem;
+  text-transform: uppercase;
+}
+
+.tag {
+  color: var(--terminal-info);
+}
+
+@media (max-width: 749px) {
+  .product-thumbnails {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .product-form-wrapper {
+    gap: 1rem;
+  }
+  
+  .quantity {
+    max-width: 150px;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', function() {
+  // Thumbnail functionality
+  const thumbnailBtns = document.querySelectorAll('.thumbnail-btn');
+  const mainImage = document.querySelector('.product-main-image');
+
+  thumbnailBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      thumbnailBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      const newSrc = this.querySelector('img').src.replace('_150x', '_800x');
+      mainImage.src = newSrc;
+    });
+  });
+
+  // Add to cart functionality
+  const productForm = document.querySelector('.product-form');
+  if (productForm) {
+    productForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = this.querySelector('.product-form-submit');
+      const originalText = submitBtn.innerHTML;
+      
+      submitBtn.innerHTML = '<span>[...] PROCESSING</span>';
+      submitBtn.disabled = true;
+
+      const formData = new FormData(this);
+      
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        submitBtn.innerHTML = '<span>[✓] ADDED TO CART</span>';
+        
+        setTimeout(() => {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }, 2000);
+        
+        // Update cart count
+        const cartCount = document.querySelector('.cart-count-bubble span');
+        if (cartCount) {
+          const currentCount = parseInt(cartCount.textContent);
+          cartCount.textContent = currentCount + parseInt(formData.get('quantity'));
+        }
+      })
+      .catch(error => {
+        submitBtn.innerHTML = '<span>[!] ERROR</span>';
+        
+        setTimeout(() => {
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        }, 2000);
+      });
+    });
+  }
+});
+{% endjavascript %}

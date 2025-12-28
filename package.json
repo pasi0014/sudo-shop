@@ -1,0 +1,36 @@
+{
+  "name": "terminal-shopify-theme",
+  "version": "1.0.0",
+  "description": "A Linux-inspired terminal/CLI theme for Shopify stores selling tech products",
+  "main": "layout/theme.liquid",
+  "scripts": {
+    "dev": "shopify theme dev",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull",
+    "watch": "shopify theme dev --theme <theme-id>"
+  },
+  "keywords": [
+    "shopify",
+    "theme",
+    "terminal",
+    "linux",
+    "cli",
+    "dark-mode",
+    "tech",
+    "ecommerce"
+  ],
+  "author": "Sudo Shop",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sudoshop/terminal-theme"
+  },
+  "bugs": {
+    "url": "https://github.com/sudoshop/terminal-theme/issues"
+  },
+  "homepage": "https://github.com/sudoshop/terminal-theme#readme",
+  "devDependencies": {
+    "@shopify/cli": "^3.0.0",
+    "@shopify/theme": "^3.0.0"
+  }
+}

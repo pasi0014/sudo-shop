@@ -1,0 +1,262 @@
+<header class="header page-width">
+  <div class="terminal-window">
+    <div class="terminal-header">
+      <div class="terminal-button close"></div>
+      <div class="terminal-button minimize"></div>
+      <div class="terminal-button maximize"></div>
+      <h1 class="terminal-title">sudo-shop@terminal</h1>
+    </div>
+    <div class="terminal-body">
+      <div class="header-content">
+        <div class="logo-section">
+          {%- if section.settings.logo != blank -%}
+            <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+              <img 
+                srcset="{{ section.settings.logo | image_url: width: section.settings.logo_width }}, {{ section.settings.logo | image_url: width: section.settings.logo_width, scale: 2 }} 2x"
+                src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}"
+                alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+                width="{{ section.settings.logo_width }}"
+                height="{{ section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio | round }}"
+                class="header__heading-logo"
+              >
+            </a>
+          {%- else -%}
+            <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+              <span class="terminal-command">sudo shop</span>
+            </a>
+          {%- endif -%}
+        </div>
+
+        <nav class="header__inline-menu">
+          <ul class="list-menu list-menu--inline" role="list">
+            {%- for link in section.settings.menu.links -%}
+              <li>
+                {%- if link.links != blank -%}
+                  <header-menu>
+                    <details id="Details-HeaderMenu-{{ forloop.index }}">
+                      <summary 
+                        id="HeaderMenu-{{ forloop.index }}" 
+                        class="header__menu-item list-menu__item link focus-inset"
+                      >
+                        <span {%- if link.child_active %} class="header__active-menu-item"{% endif %}>
+                          {{ link.title | escape }}
+                        </span>
+                        <span class="terminal-cursor-block"></span>
+                      </summary>
+                      <ul 
+                        id="HeaderMenu-MenuList-{{ forloop.index }}" 
+                        class="header__submenu list-menu list-menu--disclosure gradient global-settings-popup" 
+                        role="list" 
+                        tabindex="-1"
+                      >
+                        {%- for childlink in link.links -%}
+                          <li>
+                            <a 
+                              id="HeaderLink-{{ forloop.index }}-{{ forloop.index0 }}" 
+                              href="{{ childlink.url }}" 
+                              class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.active %} list-menu__item--active{% endif %}"
+                              {% if childlink.active %} aria-current="page"{% endif %}
+                            >
+                              <span class="terminal-prompt">></span> {{ childlink.title | escape }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </details>
+                  </header-menu>
+                {%- else -%}
+                  <a 
+                    id="HeaderMenu-{{ forloop.index }}" 
+                    href="{{ link.url }}" 
+                    class="header__menu-item list-menu__item link link--text focus-inset{% if link.active %} list-menu__item--active{% endif %}"
+                    {% if link.active %} aria-current="page"{% endif %}
+                  >
+                    <span {%- if link.active %} class="header__active-menu-item"{% endif %}>
+                      <span class="terminal-prompt">></span> {{ link.title | escape }}
+                    </span>
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+        <div class="header__icons">
+          <details-modal class="header__search">
+            <details>
+              <summary 
+                class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle" 
+                aria-haspopup="dialog" 
+                aria-label="{{ 'general.search.title' | t }}"
+              >
+                <span>
+                  <svg class="modal__toggle-open icon icon-search" aria-hidden="true" focusable="false">
+                    <use href="#icon-search"></use>
+                  </svg>
+                  <svg class="modal__toggle-close icon icon-close" aria-hidden="true" focusable="false">
+                    <use href="#icon-close"></use>
+                  </svg>
+                </span>
+              </summary>
+              <div 
+                class="search-modal modal__content gradient" 
+                role="dialog" 
+                aria-modal="true" 
+                aria-label="{{ 'general.search.title' | t }}"
+              >
+                <div class="modal-overlay"></div>
+                <div 
+                  class="search-modal__content search-modal__content-bottom" 
+                  tabindex="-1"
+                >
+                  {%- if settings.predictive_search_enabled -%}
+                    <predictive-search 
+                      class="search-modal__form" 
+                      data-loading-text="{{ 'accessibility.loading' | t }}"
+                    >
+                  {%- endif -%}
+                    <form 
+                      action="{{ routes.search_url }}" 
+                      method="get" 
+                      role="search" 
+                      class="search search-modal__form"
+                    >
+                      <div class="field">
+                        <input 
+                          class="search__input field__input" 
+                          id="Search-In-Modal" 
+                          type="search" 
+                          name="q" 
+                          value="{{ search.terms | escape }}"
+                          placeholder="{{ 'general.search.search' | t }}"
+                          {%- if settings.predictive_search_enabled -%}
+                            role="combobox"
+                            aria-expanded="false"
+                            aria-owns="predictive-search-results"
+                            aria-controls="predictive-search-results"
+                            aria-haspopup="listbox"
+                            aria-autocomplete="list"
+                            autocorrect="off"
+                            autocomplete="off"
+                            autocapitalize="off"
+                            spellcheck="false"
+                          {%- endif -%}
+                        >
+                        <label class="field__label" for="Search-In-Modal">
+                          <span class="terminal-prompt">></span> {{ 'general.search.search' | t }}
+                        </label>
+                        <input type="hidden" name="options[prefix]" value="last">
+                        <button 
+                          type="reset" 
+                          class="reset__button field__button hidden"
+                          aria-label="{{ 'general.search.reset' | t }}"
+                        >
+                          <svg class="icon icon-close" aria-hidden="true" focusable="false">
+                            <use href="#icon-reset"></use>
+                          </svg>
+                        </button>
+                        <button 
+                          class="search__button field__button" 
+                          aria-label="{{ 'general.search.search' | t }}"
+                        >
+                          <svg class="icon icon-search" aria-hidden="true" focusable="false">
+                            <use href="#icon-search"></use>
+                          </svg>
+                        </button>
+                      </div>
+
+                      {%- if settings.predictive_search_enabled -%}
+                        <div 
+                          class="predictive-search predictive-search--header" 
+                          tabindex="-1" 
+                          data-predictive-search
+                        >
+                          <div class="predictive-search__loading-state">
+                            <svg 
+                              aria-hidden="true" 
+                              focusable="false" 
+                              class="spinner" 
+                              viewBox="0 0 66 66" 
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                            </svg>
+                          </div>
+                        </div>
+                      {%- endif -%}
+                    </form>
+                    {%- if settings.predictive_search_enabled -%}
+                    </predictive-search>
+                  {%- endif -%}
+                  <button 
+                    type="button" 
+                    class="search-modal__close-button modal__close-button link link--text focus-inset" 
+                    aria-label="{{ 'accessibility.close' | t }}"
+                  >
+                    <svg class="icon icon-close" aria-hidden="true" focusable="false">
+                      <use href="#icon-close"></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </details>
+          </details-modal>
+
+          <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+            {%- liquid
+              if cart == empty
+                render 'icon-cart-empty'
+              else
+                render 'icon-cart'
+              endif
+            -%}
+            <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+            {%- if cart != empty -%}
+              <div class="cart-count-bubble">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </a>
+
+          {% if shop.customer_accounts_enabled %}
+            <a 
+              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" 
+              class="header__icon header__icon--account link focus-inset"
+            >
+              {% render 'icon-account' %}
+              <span class="visually-hidden">
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </span>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- if request.page_type == 'index' -%}
+    <div class="boot-sequence">
+      <div class="terminal-output"></div>
+    </div>
+  {%- endif -%}
+</header>
+
+{% if section.settings.logo_position == 'middle-center' %}
+  <style>
+    .header__heading-link {
+      margin: 0 auto;
+    }
+  </style>
+{% endif %}
+
+<script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'header.js' | asset_url }}" defer="defer"></script>

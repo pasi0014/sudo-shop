@@ -1,0 +1,568 @@
+<div class="hero-section{% if section.settings.full_width %} hero-section--full-width{% endif %}">
+  <div class="terminal-window hero-window">
+    <div class="terminal-header">
+      <div class="terminal-button close"></div>
+      <div class="terminal-button minimize"></div>
+      <div class="terminal-button maximize"></div>
+      <h1 class="terminal-title">~/welcome</h1>
+    </div>
+    <div class="terminal-body hero-body">
+      <div class="hero-content">
+        <div class="hero-terminal">
+          <div class="terminal-output boot-sequence">
+            <div class="terminal-line">
+              <span class="terminal-prompt">root@sudo-shop:~$</span> ./init.sh
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-output info">[INFO] Loading premium tech products...</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-output success">[SUCCESS] Systems operational</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-text">
+          {% if section.settings.heading != blank %}
+            <h1 class="hero-heading">
+              <span class="terminal-prompt">></span>
+              <span class="typewriter">{{ section.settings.heading }}</span>
+              <span class="terminal-cursor-block"></span>
+            </h1>
+          {% else %}
+            <h1 class="hero-heading">
+              <span class="terminal-prompt">></span>
+              <span class="typewriter">Premium Tech for Developers</span>
+              <span class="terminal-cursor-block"></span>
+            </h1>
+          {% endif %}
+
+          {% if section.settings.subheading != blank %}
+            <p class="hero-subheading">{{ section.settings.subheading }}</p>
+          {% else %}
+            <p class="hero-subheading">
+              <span class="terminal-prompt">></span> 
+              Elevate your workspace with gear designed for those who code, build, and break things.
+            </p>
+          {% endif %}
+
+          <div class="hero-actions">
+            {% if section.settings.button_label_1 != blank and section.settings.button_link_1 != blank %}
+              <a href="{{ section.settings.button_link_1 }}" class="terminal-button hero-button">
+                [{{ section.settings.button_label_1 }}]
+              </a>
+            {% else %}
+              <a href="/collections/all" class="terminal-button hero-button">
+                [SHOP NOW]
+              </a>
+            {% endif %}
+
+            {% if section.settings.button_label_2 != blank and section.settings.button_link_2 != blank %}
+              <a href="{{ section.settings.button_link_2 }}" class="terminal-link hero-link">
+                [{{ section.settings.button_label_2 }}]
+              </a>
+            {% else %}
+              <a href="/pages/about" class="terminal-link hero-link">
+                [LEARN MORE]
+              </a>
+            {% endif %}
+          </div>
+
+          {% if section.settings.show_stats %}
+            <div class="hero-stats">
+              <div class="stat-item">
+                <div class="stat-value terminal-command">{{ section.settings.stat_1_value | default: '500+' }}</div>
+                <div class="stat-label">{{ section.settings.stat_1_label | default: 'Products' }}</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value terminal-command">{{ section.settings.stat_2_value | default: '50K+' }}</div>
+                <div class="stat-label">{{ section.settings.stat_2_label | default: 'Customers' }}</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value terminal-command">{{ section.settings.stat_3_value | default: '24/7' }}</div>
+                <div class="stat-label">{{ section.settings.stat_3_label | default: 'Support' }}</div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if section.settings.image != blank %}
+          <div class="hero-image-wrapper">
+            <img 
+              srcset="
+                {{ section.settings.image | image_url: width: 400 }} 400w,
+                {{ section.settings.image | image_url: width: 600 }} 600w,
+                {{ section.settings.image | image_url: width: 800 }} 800w,
+                {{ section.settings.image | image_url: width: 1000 }} 1000w
+              "
+              src="{{ section.settings.image | image_url: width: 800 }}"
+              alt="{{ section.settings.image.alt | escape }}"
+              width="{{ section.settings.image.width }}"
+              height="{{ section.settings.image.height }}"
+              loading="lazy"
+              class="hero-image"
+            >
+            {% if section.settings.show_image_border %}
+              <div class="hero-image-border"></div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.show_command_line %}
+        <div class="hero-command-line">
+          <span class="terminal-prompt">user@sudo-shop:~$</span>
+          <input 
+            type="text" 
+            class="hero-command-input" 
+            placeholder="Type 'help' for commands..."
+            autocomplete="off"
+          >
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero section",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "Full width"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Premium Tech for Developers"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Elevate your workspace with gear designed for those who code, build, and break things."
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "Button 1 label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "Button 1 link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Button 2 label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Button 2 link",
+      "default": "/pages/about"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_border",
+      "default": true,
+      "label": "Show image border"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "default": true,
+      "label": "Show statistics"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 value",
+      "default": "500+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 label",
+      "default": "Products"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 value",
+      "default": "50K+"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 label",
+      "default": "Customers"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 value",
+      "default": "24/7"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 label",
+      "default": "Support"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_command_line",
+      "default": true,
+      "label": "Show command line"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "large",
+      "label": "Section height"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero section"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+.hero-section {
+  padding: 2rem 0;
+  margin: 2rem auto;
+}
+
+.hero-section--full-width .page-width {
+  max-width: 100%;
+  padding: 0;
+}
+
+.hero-window {
+  min-height: 600px;
+}
+
+.hero-window.hero-section--large {
+  min-height: 700px;
+}
+
+.hero-window.hero-section--medium {
+  min-height: 550px;
+}
+
+.hero-window.hero-section--small {
+  min-height: 450px;
+}
+
+.hero-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 500px;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 990px) {
+  .hero-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.hero-terminal {
+  background: #1a1a1a;
+  border: 1px solid var(--terminal-border);
+  padding: 1.5rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.terminal-line {
+  margin-bottom: 0.5rem;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero-heading {
+  font-size: 2rem;
+  margin: 0;
+  line-height: 1.2;
+  color: var(--terminal-text);
+}
+
+@media (min-width: 750px) {
+  .hero-heading {
+    font-size: 3rem;
+  }
+}
+
+.hero-subheading {
+  font-size: 1.1rem;
+  color: var(--terminal-text-dim);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-button {
+  padding: 14px 28px;
+  font-size: 1rem;
+}
+
+.hero-link {
+  padding: 12px 24px;
+  border: 2px dashed var(--terminal-info);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-link:hover {
+  border-style: solid;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--terminal-border);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--terminal-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.05);
+}
+
+.hero-image-border {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 2px solid var(--terminal-accent);
+  pointer-events: none;
+}
+
+.hero-command-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #1a1a1a;
+  border: 1px solid var(--terminal-border);
+  border-radius: 4px;
+}
+
+.hero-command-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--terminal-text);
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem;
+  outline: none;
+}
+
+.hero-command-input::placeholder {
+  color: var(--terminal-text-dim);
+}
+
+@media (max-width: 989px) {
+  .hero-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 750px) {
+  .hero-section {
+    padding: 1rem 0;
+  }
+  
+  .hero-window {
+    min-height: auto;
+  }
+  
+  .hero-body {
+    min-height: 400px;
+  }
+  
+  .hero-heading {
+    font-size: 1.8rem;
+  }
+  
+  .hero-subheading {
+    font-size: 1rem;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+  }
+  
+  .hero-button,
+  .hero-link {
+    width: 100%;
+  }
+  
+  .hero-terminal {
+    max-height: 200px;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', function() {
+  const commandInput = document.querySelector('.hero-command-input');
+  
+  if (commandInput) {
+    commandInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const command = this.value.toLowerCase().trim();
+        const heroTerminal = document.querySelector('.hero-terminal');
+        
+        if (heroTerminal) {
+          const output = document.createElement('div');
+          output.className = 'terminal-line';
+          
+          switch(command) {
+            case 'help':
+              output.innerHTML = `
+                <span class="terminal-prompt">user@sudo-shop:~$</span> ${this.value}<br>
+                <span class="terminal-output info">Available commands: help, shop, about, contact, clear</span>
+              `;
+              break;
+            case 'shop':
+              output.innerHTML = `
+                <span class="terminal-prompt">user@sudo-shop:~$</span> ${this.value}<br>
+                <span class="terminal-output success">[SUCCESS] Redirecting to shop...</span>
+              `;
+              setTimeout(() => {
+                window.location.href = '/collections/all';
+              }, 1000);
+              break;
+            case 'about':
+              output.innerHTML = `
+                <span class="terminal-prompt">user@sudo-shop:~$</span> ${this.value}<br>
+                <span class="terminal-output success">[SUCCESS] Redirecting to about...</span>
+              `;
+              setTimeout(() => {
+                window.location.href = '/pages/about';
+              }, 1000);
+              break;
+            case 'contact':
+              output.innerHTML = `
+                <span class="terminal-prompt">user@sudo-shop:~$</span> ${this.value}<br>
+                <span class="terminal-output success">[SUCCESS] Redirecting to contact...</span>
+              `;
+              setTimeout(() => {
+                window.location.href = '/pages/contact';
+              }, 1000);
+              break;
+            case 'clear':
+              heroTerminal.innerHTML = '';
+              this.value = '';
+              return;
+            case '':
+              return;
+            default:
+              output.innerHTML = `
+                <span class="terminal-prompt">user@sudo-shop:~$</span> ${this.value}<br>
+                <span class="terminal-output error">[ERROR] Command not found: ${command}</span>
+              `;
+          }
+          
+          heroTerminal.appendChild(output);
+          heroTerminal.scrollTop = heroTerminal.scrollHeight;
+          this.value = '';
+        }
+      }
+    });
+  }
+});
+{% endjavascript %}
